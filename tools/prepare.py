@@ -63,7 +63,7 @@ def main():
             'output_schema': {'type': 'object', 'properties': {'app': {'type': 'string'}, 'results': {'type': 'object'}},
                               'required': ['app', 'results'], 'additionalProperties': False}}]}, indent=2) + '\n')
         manifest = {'schema': 1, 'id': app_id, 'version': VERSION, 'name': label,
-                    'integrity': {'bundle_blake3': '0' * 64}, 'capabilities': ['wasm', 'storage'],
+                    'integrity': {'bundle_blake3': '0' * 64}, 'capabilities': [] if name == 'first' else ['wasm', 'storage'],
                     'requires': ['wasm-shared-components-v1', 'script-tools-v1', 'host-api-v1'],
                     'host_api': {'required': {'app_tools.dispatch': 1, 'runtime.describe': 1}},
                     'components': pins,

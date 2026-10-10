@@ -8,6 +8,10 @@ stored once. A second component calls the real host's `runtime.describe` API.
 All input is synthetic. No personal account, API key, model, or separate
 publisher signing key is needed.
 
+The first app declares an empty capability list. The second declares `wasm`
+and `storage`. Both must work through the same host APIs and shared component
+bytes: these manifest fields describe the app, and do not gate ordinary APIs.
+
 This is an acceptance fixture, not a general note editor. `SOURCE.json` records
 the exact upstream source and verifier revisions. The Rust source and lockfile
 are in `guest/`; `pulldown-cmark` supplies the Markdown renderer.
