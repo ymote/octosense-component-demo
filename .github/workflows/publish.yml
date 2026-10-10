@@ -1,0 +1,91 @@
+name: Publish shared-component acceptance release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    if: github.repository == 'ymote/octosense-component-demo'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    env:
+      PUBLISHER_REPOSITORY_ID: ${{ github.repository_id }}
+      PUBLISHER_OWNER_ID: ${{ github.repository_owner_id }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          path: demo
+          persist-credentials: false
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: OctoSense-org/OctoSense-App-Hub
+          ref: 40abb23b50d5c3e546c50d1d91ab27258a203eaf
+          path: app-hub
+          persist-credentials: false
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: OctoSense-org/Octoscript-Makepad
+          ref: 6cf2d90aa33ff4ae603f49c7557f3ecf986207f0
+          path: octoscript-makepad
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de
+        with:
+          toolchain: 1.97.1
+          targets: wasm32-wasip2
+      - name: Build pinned verifier and reproducible components
+        run: |
+          python3 octoscript-makepad/tools/runtime.py prepare --root "$GITHUB_WORKSPACE"
+          cargo build --locked --release --manifest-path app-hub/Cargo.toml -p octosense-app-hub
+          cargo build --locked --release --manifest-path demo/guest/Cargo.toml --target wasm32-wasip2 -p notes -p hostcall
+      - name: Prepare immutable component and consumer subjects
+        run: python3 demo/tools/prepare.py --hub "$GITHUB_WORKSPACE/app-hub/target/release/hub"
+      - name: Attest Markdown component
+        id: notes
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: demo/build/notes/octosense-component.json
+      - name: Attest host bridge component
+        id: hostcall
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6
+        with:
+          subject-path: demo/build/hostcall/octosense-component.json
+      - name: Attest first consumer
+        id: first
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6
+        with:
+          subject-path: demo/build/first/octosense-app-manifest.json
+      - name: Attest second consumer
+        id: second
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6
+        with:
+          subject-path: demo/build/second/octosense-app-manifest.json
+      - name: Attach and verify every real proof
+        env:
+          NOTES_PROOF: ${{ steps.notes.outputs.bundle-path }}
+          HOSTCALL_PROOF: ${{ steps.hostcall.outputs.bundle-path }}
+          FIRST_PROOF: ${{ steps.first.outputs.bundle-path }}
+          SECOND_PROOF: ${{ steps.second.outputs.bundle-path }}
+        run: python3 demo/tools/finish.py --hub "$GITHUB_WORKSPACE/app-hub/target/release/hub"
+      - name: Release verified component files and consumer packs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" demo/build/release/* \
+            --repo "$GITHUB_REPOSITORY" --verify-tag \
+            --title "Shared component acceptance $GITHUB_REF_NAME" \
+            --notes 'Synthetic components and two consumers; GitHub publisher proofs verified by the pinned App Hub CLI. No public App Hub catalog publication is implied.'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: verified-component-demo
+          path: demo/build/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30

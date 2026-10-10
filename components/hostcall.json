@@ -1,0 +1,17 @@
+{
+  "component": {
+    "schema": 1,
+    "id": "org.ymote.componentdemo.hostcall",
+    "version": "0.1.0",
+    "name": "Host API bridge",
+    "license": "Apache-2.0",
+    "publisher": {
+      "name": "ymote",
+      "support": "https://github.com/ymote/octosense-component-demo/issues",
+      "privacy_policy_url": "https://github.com/ymote/octosense-component-demo/blob/main/PRIVACY.md"
+    }
+  },
+  "listing": {
+    "description": "Demonstrates the owning app calling runtime.describe through octosense:host."
+  }
+}

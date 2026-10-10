@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/OctoSense-org/OctoSense",
+  "revision": "0900231c1b39c2628674f1ee858cbe5b6384c843",
+  "paths": [
+    "crates/wasm-host/tests/component-guest"
+  ],
+  "license": "Apache-2.0",
+  "app_hub_revision": "40abb23b50d5c3e546c50d1d91ab27258a203eaf"
+}

@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "scope": "UI-only native ready-state screenshots of exact main.splash template; no Wasm execution or installation claim",
+  "host_binary_sha256": "10f372b31265d4eb50fa59c175db6f66298437dccf2456e3c2993e0967774a12",
+  "host_source_provenance_verified": false,
+  "hidden_windows": true,
+  "synthetic_preview_manifest": true,
+  "template_sha256": "650fc6d2b76ff56ef26ee4f057d59a2e866be857e5c8f370875d39ea8260589c",
+  "captures": {
+    "first.png": "16eaf55bd6c2b6855adf20ebf0b9041ad9be9e1088e3b10b7e1b9ed6994304c1",
+    "second.png": "14986429d20c20cf92ff2d900ab62b1e33b5fd2feb1b0d2311616696e9943799"
+  }
+}

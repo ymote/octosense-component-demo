@@ -1,0 +1,17 @@
+{
+  "component": {
+    "schema": 1,
+    "id": "org.ymote.componentdemo.markdown",
+    "version": "0.1.0",
+    "name": "Markdown and per-app state",
+    "license": "Apache-2.0",
+    "publisher": {
+      "name": "ymote",
+      "support": "https://github.com/ymote/octosense-component-demo/issues",
+      "privacy_policy_url": "https://github.com/ymote/octosense-component-demo/blob/main/PRIVACY.md"
+    }
+  },
+  "listing": {
+    "description": "Converts Markdown with pulldown-cmark; demonstrates isolated state and storage."
+  }
+}
