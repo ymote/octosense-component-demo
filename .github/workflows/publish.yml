@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           repository: OctoSense-org/OctoSense-App-Hub
-          ref: 40abb23b50d5c3e546c50d1d91ab27258a203eaf
+          ref: f0b9b22f521607d67c7e3fdc925a810c45d62a9b
           path: app-hub
           persist-credentials: false
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803

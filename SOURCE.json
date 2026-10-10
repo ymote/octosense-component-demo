@@ -5,5 +5,5 @@
     "crates/wasm-host/tests/component-guest"
   ],
   "license": "Apache-2.0",
-  "app_hub_revision": "40abb23b50d5c3e546c50d1d91ab27258a203eaf"
+  "app_hub_revision": "f0b9b22f521607d67c7e3fdc925a810c45d62a9b"
 }
